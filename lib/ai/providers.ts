@@ -4,6 +4,7 @@ import {
   wrapLanguageModel,
 } from 'ai';
 import { xai } from '@ai-sdk/xai';
+import { createOpenAI } from '@ai-sdk/openai';
 import { isTestEnvironment } from '../constants';
 import {
   artifactModel,
@@ -11,6 +12,11 @@ import {
   reasoningModel,
   titleModel,
 } from './models.test';
+
+const openai = createOpenAI({
+  baseURL: process.env.LLM_BASE_URL,
+  apiKey: process.env.LLM_API_KEY,
+});
 
 export const myProvider = isTestEnvironment
   ? customProvider({
@@ -23,15 +29,16 @@ export const myProvider = isTestEnvironment
     })
   : customProvider({
       languageModels: {
-        'chat-model': xai('grok-2-vision-1212'),
+        'chat-model': openai('gpt-4o-mini'),
         'chat-model-reasoning': wrapLanguageModel({
-          model: xai('grok-3-mini-beta'),
+          model: openai('gpt-4o-mini'),
           middleware: extractReasoningMiddleware({ tagName: 'think' }),
         }),
-        'title-model': xai('grok-2-1212'),
-        'artifact-model': xai('grok-2-1212'),
+        'title-model': openai('gpt-4o-mini'),
+        'artifact-model': xai('gpt-4o-mini'),
       },
       imageModels: {
-        'small-model': xai.image('grok-2-image'),
+        // 'small-model': xai.image('grok-2-image'),
+        'small-model': openai('gpt-4o-mini'),
       },
     });
