@@ -60,3 +60,37 @@ pnpm dev
 ```
 
 Your app template should now be running on [localhost:3000](http://localhost:3000).
+
+
+
+## 项目启动
+
+1. 启动本地 postgres 数据库
+
+```shell
+docker run --name my-postgres -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres
+```
+
+2. 复制环境变量文件，并进行相应的修改
+
+```shell
+cp .env.example .env
+```
+
+3. 使用DBeaver连接postgres并创建数据库`chatbot`
+
+4. 执行数据库 migration
+
+   >  如果使用了上面的命令启动，`DATABASE_URL` 不用做修改即可连接
+   >
+   > ```shell
+   > npx drizzle-kit migrate
+   > ```
+
+5. 启动开发服务器
+
+```shell
+pnpm dev
+```
+
+6. 访问 http://localhost:3000
