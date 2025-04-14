@@ -104,12 +104,15 @@ function PureMultimodalInput({
   const [uploadQueue, setUploadQueue] = useState<Array<string>>([]);
 
   const submitForm = useCallback(() => {
+    // update current URL to URL with chat id
     window.history.replaceState({}, '', `/chat/${chatId}`);
 
+    // submit files
     handleSubmit(undefined, {
       experimental_attachments: attachments,
     });
 
+    // reset attachments and input
     setAttachments([]);
     setLocalStorageInput('');
     resetHeight();
@@ -181,12 +184,14 @@ function PureMultimodalInput({
 
   return (
     <div className="relative w-full flex flex-col gap-4">
+      {/* Show suggested buttons for AI chatbot */}
       {messages.length === 0 &&
         attachments.length === 0 &&
         uploadQueue.length === 0 && (
           <SuggestedActions append={append} chatId={chatId} />
         )}
 
+      {/* File upload button */}
       <input
         type="file"
         className="fixed -top-4 -left-4 size-0.5 opacity-0 pointer-events-none"
@@ -196,6 +201,7 @@ function PureMultimodalInput({
         tabIndex={-1}
       />
 
+      {/* handle file upload and file preview after uploading */}
       {(attachments.length > 0 || uploadQueue.length > 0) && (
         <div
           data-testid="attachments-preview"
@@ -219,6 +225,7 @@ function PureMultimodalInput({
         </div>
       )}
 
+      {/* chat box */}
       <Textarea
         data-testid="multimodal-input"
         ref={textareaRef}
@@ -248,10 +255,12 @@ function PureMultimodalInput({
         }}
       />
 
+      {/* file upload button */}
       <div className="absolute bottom-0 p-2 w-fit flex flex-row justify-start">
         <AttachmentsButton fileInputRef={fileInputRef} status={status} />
       </div>
 
+      {/* send&stop button */}
       <div className="absolute bottom-0 right-0 p-2 w-fit flex flex-row justify-end">
         {status === 'submitted' ? (
           <StopButton stop={stop} setMessages={setMessages} />
