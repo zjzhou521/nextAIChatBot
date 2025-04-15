@@ -107,7 +107,7 @@ function PureMultimodalInput({
     // update current URL to URL with chat id
     window.history.replaceState({}, '', `/chat/${chatId}`);
 
-    // submit files
+    // submit text message and files
     handleSubmit(undefined, {
       experimental_attachments: attachments,
     });

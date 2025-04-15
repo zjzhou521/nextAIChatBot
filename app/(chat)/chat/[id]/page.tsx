@@ -1,13 +1,12 @@
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
-
+import { Attachment, UIMessage } from 'ai';
 import { auth } from '@/app/(auth)/auth';
 import { Chat } from '@/components/chat';
+import { DBMessage } from '@/lib/db/schema';
 import { getChatById, getMessagesByChatId } from '@/lib/db/queries';
 import { DataStreamHandler } from '@/components/data-stream-handler';
 import { DEFAULT_CHAT_MODEL } from '@/lib/ai/models';
-import { DBMessage } from '@/lib/db/schema';
-import { Attachment, UIMessage } from 'ai';
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
