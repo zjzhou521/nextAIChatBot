@@ -57,6 +57,7 @@ const PurePreviewMessage = ({
             },
           )}
         >
+          {/* render AI avatar */}
           {message.role === 'assistant' && (
             <div className="size-8 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border bg-background">
               <div className="translate-y-px">
@@ -65,6 +66,7 @@ const PurePreviewMessage = ({
             </div>
           )}
 
+          {/* render attached file */}
           <div className="flex flex-col gap-4 w-full">
             {message.experimental_attachments && (
               <div
@@ -84,6 +86,9 @@ const PurePreviewMessage = ({
               const { type } = part;
               const key = `message-${message.id}-part-${index}`;
 
+              {
+                /* render reasoning message */
+              }
               if (type === 'reasoning') {
                 return (
                   <MessageReasoning
@@ -95,9 +100,11 @@ const PurePreviewMessage = ({
               }
 
               if (type === 'text') {
+                // view mode
                 if (mode === 'view') {
                   return (
                     <div key={key} className="flex flex-row gap-2 items-start">
+                      {/* edit button */}
                       {message.role === 'user' && !isReadonly && (
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -116,6 +123,7 @@ const PurePreviewMessage = ({
                         </Tooltip>
                       )}
 
+                      {/* text message */}
                       <div
                         data-testid="message-content"
                         className={cn('flex flex-col gap-4', {
@@ -123,12 +131,13 @@ const PurePreviewMessage = ({
                             message.role === 'user',
                         })}
                       >
+                        {/* render the text message in markdown */}
                         <Markdown>{part.text}</Markdown>
                       </div>
                     </div>
                   );
                 }
-
+                // edit mode
                 if (mode === 'edit') {
                   return (
                     <div key={key} className="flex flex-row gap-2 items-start">
@@ -146,6 +155,7 @@ const PurePreviewMessage = ({
                 }
               }
 
+              // AI tools like weather, createDocument, etc.
               if (type === 'tool-invocation') {
                 const { toolInvocation } = part;
                 const { toolName, toolCallId, state } = toolInvocation;
@@ -214,6 +224,7 @@ const PurePreviewMessage = ({
               }
             })}
 
+            {/* copy, vote message */}
             {!isReadonly && (
               <MessageActions
                 key={`action-${message.id}`}

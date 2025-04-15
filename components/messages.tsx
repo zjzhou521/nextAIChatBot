@@ -27,6 +27,7 @@ function PureMessages({
   reload,
   isReadonly,
 }: MessagesProps) {
+  // ensures that the chat interface automatically scrolls to the latest message or content update.
   const [messagesContainerRef, messagesEndRef] =
     useScrollToBottom<HTMLDivElement>();
 
@@ -35,8 +36,10 @@ function PureMessages({
       ref={messagesContainerRef}
       className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4"
     >
+      {/* send greetings if no message */}
       {messages.length === 0 && <Greeting />}
 
+      {/* render each message */}
       {messages.map((message, index) => (
         <PreviewMessage
           key={message.id}
@@ -54,6 +57,7 @@ function PureMessages({
         />
       ))}
 
+      {/* show model is loading/thinking */}
       {status === 'submitted' &&
         messages.length > 0 &&
         messages[messages.length - 1].role === 'user' && <ThinkingMessage />}
