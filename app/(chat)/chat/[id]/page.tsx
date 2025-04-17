@@ -59,6 +59,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           selectedVisibilityType={chat.visibility}
           isReadonly={session?.user?.id !== chat.userId}
         />
+        {/* data stream for artifacts */}
         <DataStreamHandler id={id} />
       </>
     );
@@ -73,6 +74,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         selectedVisibilityType={chat.visibility}
         isReadonly={session?.user?.id !== chat.userId}
       />
+      {/* data stream for artifacts */}
       <DataStreamHandler id={id} />
     </>
   );
