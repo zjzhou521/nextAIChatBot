@@ -67,6 +67,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           session={session}
           autoResume={true}
         />
+        {/* data stream for artifacts */}
         <DataStreamHandler id={id} />
       </>
     );
@@ -83,6 +84,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         session={session}
         autoResume={true}
       />
+      {/* data stream for artifacts */}
       <DataStreamHandler id={id} />
     </>
   );
