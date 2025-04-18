@@ -53,9 +53,12 @@ export async function POST(request: Request) {
     try {
       const data = await put(`${filename}`, fileBuffer, {
         access: 'public',
+        contentType: file.type,
       });
-
-      return NextResponse.json(data);
+      return NextResponse.json({
+        ...data,
+        contentType: file.type,
+      });
     } catch (error) {
       return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
     }

@@ -1,6 +1,8 @@
 'use client';
 
-import type { Attachment, UIMessage } from 'ai';
+// import type { Attachment, UIMessage } from 'ai';
+import type { Attachment } from '@ai-sdk/ui-utils';
+import type { UIMessage } from 'ai';
 import cx from 'classnames';
 import type React from 'react';
 import {
@@ -109,11 +111,26 @@ function PureMultimodalInput({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadQueue, setUploadQueue] = useState<Array<string>>([]);
 
+  // submit text message and files
+  const [dummyAttachments] = useState<Attachment[]>([
+    // {
+    //   name: 'baidu.png',
+    //   contentType: 'image/png',
+    //   url: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
+    // },
+    // {
+    //   name: 'poster_1.png',
+    //   contentType: 'image/png',
+    //   url: process.env.DUMMY_DATAURL,
+    // },
+    {},
+  ]);
+
   const submitForm = useCallback(() => {
     // update current URL to URL with chat id
     window.history.replaceState({}, '', `/chat/${chatId}`);
 
-    // submit text message and files
+    // setAttachments(dummyAttachments);
     handleSubmit(undefined, {
       experimental_attachments: attachments,
     });
@@ -144,14 +161,13 @@ function PureMultimodalInput({
         method: 'POST',
         body: formData,
       });
-
       if (response.ok) {
         const data = await response.json();
         const { url, pathname, contentType } = data;
 
         return {
           url,
-          name: pathname,
+          name: pathname.startsWith('/') ? pathname.slice(1) : pathname,
           contentType: contentType,
         };
       }
@@ -162,11 +178,23 @@ function PureMultimodalInput({
     }
   };
 
+  const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
   const handleFileChange = useCallback(
     async (event: ChangeEvent<HTMLInputElement>) => {
       const files = Array.from(event.target.files || []);
 
       setUploadQueue(files.map((file) => file.name));
+
+      // generate dataURL for each file
+      files.forEach((file) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64String = reader.result as string;
+          setImageDataUrl(base64String);
+          file.dataURL = base64String;
+        };
+        reader.readAsDataURL(file); // Triggers onloadend
+      });
 
       try {
         const uploadPromises = files.map((file) => uploadFile(file));
@@ -174,6 +202,16 @@ function PureMultimodalInput({
         const successfullyUploadedAttachments = uploadedAttachments.filter(
           (attachment) => attachment !== undefined,
         );
+
+        // put dataURL as attachment.url
+        successfullyUploadedAttachments.forEach((attachment) => {
+          const matchingFile = files.find(
+            (file) => attachment.name === file.name,
+          );
+          if (matchingFile) {
+            attachment.url = matchingFile.dataURL;
+          }
+        });
 
         setAttachments((currentAttachments) => [
           ...currentAttachments,
