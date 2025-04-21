@@ -282,7 +282,7 @@ function PureMultimodalInput({
         tabIndex={-1}
       />
 
-      {/* handle file upload and file preview after uploading */}
+      {/* handle file preview during and after uploading */}
       {(attachments.length > 0 || uploadQueue.length > 0) && (
         <div
           data-testid="attachments-preview"
