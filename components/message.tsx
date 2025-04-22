@@ -88,13 +88,12 @@ const PurePreviewMessage = ({
                 </div>
               )}
 
+            {/* render message */}
             {message.parts?.map((part, index) => {
               const { type } = part;
               const key = `message-${message.id}-part-${index}`;
 
-              {
-                /* render reasoning message */
-              }
+              // render reasoning message
               if (type === 'reasoning') {
                 return (
                   <MessageReasoning
