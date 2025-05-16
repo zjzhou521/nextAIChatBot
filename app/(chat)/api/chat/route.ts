@@ -219,8 +219,13 @@ export async function POST(request: Request) {
           sendReasoning: true,
         });
       },
-      onError: () => {
-        return 'Oops, an error occurred!';
+      onError: (error) => {
+        console.error('Chat stream error:', error);
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : 'An unexpected error occurred while processing your request';
+        return `Error: ${errorMessage}`;
       },
     });
 

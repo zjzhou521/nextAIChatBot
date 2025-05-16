@@ -61,6 +61,7 @@ const PureChatItem = ({
           </SidebarMenuAction>
         </DropdownMenuTrigger>
 
+        {/* drop down menu item for chaging visibility */}
         <DropdownMenuContent side="bottom" align="end">
           <DropdownMenuSub>
             <DropdownMenuSubTrigger className="cursor-pointer">
